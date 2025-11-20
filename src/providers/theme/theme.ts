@@ -5,13 +5,13 @@ export const theme = createTheme({
   typography: {
     fontFamily: 'Outfit, sans-serif',
   },
-
   palette: {
     background: {
       default: '#0A141E',
     },
     text: {
       primary: '#FFFFFF',
+      secondary: '#333',
     },
     divider: '#64C8FF',
   },

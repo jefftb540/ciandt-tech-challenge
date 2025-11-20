@@ -5,7 +5,7 @@ import { theme } from './providers/theme/theme'
 function App() {
   return (
     <>
-      <ThemeProvider theme={theme} defaultMode="dark">
+      <ThemeProvider theme={theme}>
         <Typography variant="h4">Hello, World!</Typography>
         <CssBaseline />
       </ThemeProvider>
