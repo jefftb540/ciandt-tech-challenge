@@ -49,7 +49,6 @@ describe('PokemonGrid', () => {
 
   it('renders empty state if pokemons prop is empty', () => {
     render(<PokemonGrid pokemons={[]} />)
-    const cards = screen.queryAllByTestId('pokemon-card')
     expect(screen.getByText('No Pokémons found.')).toBeDefined()
   })
 })
