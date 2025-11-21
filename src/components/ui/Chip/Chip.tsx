@@ -34,13 +34,5 @@ const StyledChip = styled(MuiChip)(({ theme, label }) => ({
 }))
 
 export function Chip(props: ChipProps) {
-  const { children, ...rest } = props
-
-  return (
-    <>
-      <StyledChip size="small" {...rest}>
-        {children}
-      </StyledChip>
-    </>
-  )
+  return <StyledChip size="small" {...props} />
 }
