@@ -1,20 +1,19 @@
 import { render, screen } from '@testing-library/react'
 import { PokemonCard } from './PokemonCard'
-import { Pokemon } from '../../types/Pokemon'
+import { GQLPokemon } from '../../types/Pokemon'
 
-const mockPokemon: Pokemon = {
+const mockPokemon: GQLPokemon = {
+  id: 24,
   name: 'arbok',
-  sprites: {
-    front_default: 'sprite.png',
-  },
-  types: [{ type: { name: 'poison' } }],
-  other: {
-    'official-artwork': {
-      front_default:
+  pokemon_v2_pokemonsprites: [
+    {
+      sprites:
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/24.png',
     },
-  },
-} as unknown as Pokemon
+  ],
+
+  pokemon_v2_pokemontypes: [{ pokemon_v2_type: { name: 'poison' } }],
+}
 
 describe('PokemonCard', () => {
   it('renders pokemon name', () => {
@@ -33,28 +32,15 @@ describe('PokemonCard', () => {
     const imageEl = screen.getByRole('img')
 
     expect(imageEl).toHaveStyle(
-      `background-image: url(${mockPokemon.other?.['official-artwork'].front_default})`
+      `background-image: url(${mockPokemon.pokemon_v2_pokemonsprites[0].sprites})`
     )
   })
 
-  it('falls back to sprite when artwork missing', () => {
-    const pokemon = {
-      ...mockPokemon,
-      other: { 'official-artwork': { front_default: null } },
-    } as unknown as Pokemon
-
-    render(<PokemonCard pokemon={pokemon} />)
-
-    const imageEl = screen.getByRole('img')
-    expect(imageEl).toHaveStyle(`background-image: url(sprite.png)`)
-  })
-
   it('falls back to placeholder if no image available', () => {
-    const pokemon = {
+    const pokemon: GQLPokemon = {
       ...mockPokemon,
-      sprites: { front_default: null },
-      other: { 'official-artwork': { front_default: null } },
-    } as unknown as Pokemon
+      pokemon_v2_pokemonsprites: [{ sprites: '' }],
+    }
 
     render(<PokemonCard pokemon={pokemon} />)
 

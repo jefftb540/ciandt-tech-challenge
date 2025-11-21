@@ -1,9 +1,9 @@
 import { Box, Card, CardMedia, Divider, Typography } from '@mui/material'
-import { Pokemon } from '../../types/Pokemon'
 import { Chip } from '../ui/Chip/Chip'
+import { GQLPokemon } from '../../types/Pokemon'
 
 type PokemonCardProps = {
-  pokemon: Pokemon
+  pokemon: GQLPokemon
 }
 
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
@@ -40,8 +40,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         <CardMedia
           component="image"
           image={
-            pokemon.other?.['official-artwork']?.front_default ??
-            pokemon.sprites?.front_default ??
+            pokemon.pokemon_v2_pokemonsprites[0].sprites ||
             '/assets/pokemon-placeholder.png'
           }
           sx={{
@@ -60,8 +59,11 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
           gap: 1,
         }}
       >
-        {pokemon.types.map((typeInfo) => (
-          <Chip key={typeInfo.type.name} label={typeInfo.type.name} />
+        {pokemon.pokemon_v2_pokemontypes.map((typeInfo) => (
+          <Chip
+            key={typeInfo.pokemon_v2_type.name}
+            label={typeInfo.pokemon_v2_type.name}
+          />
         ))}
       </Box>
     </Card>
