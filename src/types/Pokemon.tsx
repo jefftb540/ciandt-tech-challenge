@@ -39,7 +39,7 @@ export interface Pokemon {
   }[]
   stats: PokemonStat[]
   sprites?: PokemonSprites
-  other: {
+  other?: {
     'official-artwork': { front_default?: string | null }
   }
 }

@@ -39,7 +39,11 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       >
         <CardMedia
           component="image"
-          image={pokemon.other['official-artwork'].front_default || ''}
+          image={
+            pokemon.other?.['official-artwork']?.front_default ??
+            pokemon.sprites?.front_default ??
+            '/assets/pokemon-placeholder.png'
+          }
           sx={{
             width: '80px',
             height: '80px',
