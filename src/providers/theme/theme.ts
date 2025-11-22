@@ -14,5 +14,8 @@ export const theme = createTheme({
       secondary: '#333',
     },
     divider: '#64C8FF',
+    info: {
+      main: '#a19999',
+    },
   },
 })
