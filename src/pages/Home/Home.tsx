@@ -1,16 +1,20 @@
 import { Box } from '@mui/material'
 import { PokemonGrid } from '../../components/'
+
 import { Button } from '../../components/ui/Button/Button'
 import { usePokemons } from '../../hooks/api/usePokemons/usePokemons'
 import { MenuItem, SearchInput, Select } from '../../components/ui'
 import { useAbilities, useAreas, useTypes } from '../../hooks/api'
 import { useState } from 'react'
 import { useDebounce } from '../../hooks'
+import { PokemonTable } from '../../components/PokemonTable/PokemonTable'
+import { useSearchParams } from 'react-router-dom'
 
 export const Home = () => {
   const { data: abilities } = useAbilities()
   const { data: types } = useTypes()
   const { data: areas } = useAreas()
+  const [searchParams] = useSearchParams()
 
   const [ability, setAbility] = useState<number>()
   const [type, setType] = useState<number>()
@@ -19,12 +23,14 @@ export const Home = () => {
 
   const debouncedSearch = useDebounce(search)
 
-  const { data: pokemons, fetchNextPage } = usePokemons({
+  const { data: pokemonData, fetchNextPage } = usePokemons({
     ability,
     area,
     name: debouncedSearch,
     type,
   })
+
+  const pokemons = pokemonData?.pages.flatMap((page) => page.pokemons)
 
   return (
     <>
@@ -92,9 +98,11 @@ export const Home = () => {
           mt: 4,
         }}
       >
-        <PokemonGrid
-          pokemons={pokemons?.pages.flatMap((page) => page.pokemons)}
-        />
+        {searchParams.get('view') === 'Table' ? (
+          <PokemonTable pokemons={pokemons} />
+        ) : (
+          <PokemonGrid pokemons={pokemons} />
+        )}
         <Button variant="outlined" size="large" onClick={() => fetchNextPage()}>
           Load more
         </Button>

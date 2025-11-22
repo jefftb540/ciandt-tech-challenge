@@ -44,6 +44,12 @@ export function buildGetPokemonsQuery(filters: {
             name
           }
         }
+        pokemon_v2_pokemonstats {
+          base_stat
+          pokemon_v2_stat {
+            name
+          }
+      }
       }
 
       pokemon_v2_pokemon_aggregate(

@@ -11,6 +11,7 @@ const mockPokemon: GQLPokemon = {
         'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/24.png',
     },
   ],
+  pokemon_v2_pokemonstats: [],
 
   pokemon_v2_pokemontypes: [{ pokemon_v2_type: { name: 'poison' } }],
 }
