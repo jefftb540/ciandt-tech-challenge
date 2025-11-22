@@ -5,10 +5,9 @@ import { usePokemons } from '../../hooks/api/usePokemons/usePokemons'
 import { MenuItem, SearchInput, Select } from '../../components/ui'
 import { useAbilities, useAreas, useTypes } from '../../hooks/api'
 import { useState } from 'react'
+import { useDebounce } from '../../hooks'
 
 export const Home = () => {
-  const { data: pokemons, fetchNextPage } = usePokemons(16)
-
   const { data: abilities } = useAbilities()
   const { data: types } = useTypes()
   const { data: areas } = useAreas()
@@ -16,7 +15,16 @@ export const Home = () => {
   const [ability, setAbility] = useState<number>()
   const [type, setType] = useState<number>()
   const [area, setArea] = useState<number>()
-  const [search, setSearch] = useState<string>()
+  const [search, setSearch] = useState<string>('')
+
+  const debouncedSearch = useDebounce(search)
+
+  const { data: pokemons, fetchNextPage } = usePokemons({
+    ability,
+    area,
+    name: debouncedSearch,
+    type,
+  })
 
   return (
     <>
@@ -38,30 +46,39 @@ export const Home = () => {
           onChange={(e) => setSearch(e.target.value)}
         />
         <Select
-          value={ability}
-          onChange={(e) => setAbility(Number(e.target.value))}
+          value={ability ?? ''}
+          onChange={(e) => setAbility(Number(e.target.value) ?? undefined)}
           label="Ability"
         >
+          <MenuItem value={''}>All</MenuItem>
           {abilities?.map((ability) => (
-            <MenuItem value={ability.id}>{ability.name}</MenuItem>
+            <MenuItem key={ability.id} value={ability.id}>
+              {ability.name}
+            </MenuItem>
           ))}
         </Select>
         <Select
-          value={type}
-          onChange={(e) => setType(Number(e.target.value))}
+          value={type ?? ''}
+          onChange={(e) => setType(Number(e.target.value) ?? undefined)}
           label="Type"
         >
+          <MenuItem value={''}>All</MenuItem>
           {types?.map((type) => (
-            <MenuItem value={type.id}>{type.name}</MenuItem>
+            <MenuItem key={type.id} value={type.id}>
+              {type.name}
+            </MenuItem>
           ))}
         </Select>
         <Select
-          value={area}
-          onChange={(e) => setArea(Number(e.target.value))}
+          value={area ?? ''}
+          onChange={(e) => setArea(Number(e.target.value) ?? undefined)}
           label="Area"
         >
+          <MenuItem value={''}>All</MenuItem>
           {areas?.map((area) => (
-            <MenuItem value={area.id}>{area.name}</MenuItem>
+            <MenuItem key={area.id} value={area.id}>
+              {area.name}
+            </MenuItem>
           ))}
         </Select>
       </Box>

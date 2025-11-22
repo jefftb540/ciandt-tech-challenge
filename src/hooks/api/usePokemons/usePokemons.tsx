@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { graphqlClient } from '../../../providers/graphQLClient'
-import { GET_POKEMONS } from '../../../graphQl/getPokemons'
+import { buildGetPokemonsQuery } from '../../../graphQl/getPokemons'
 import { GQLPokemonsResponse } from '../../../types/Pokemon'
 
 type PokemonsResponse = {
@@ -8,9 +8,25 @@ type PokemonsResponse = {
   total: number
 }
 
-export function usePokemons(limit: number, offset: number = 0) {
+type PokemonFilters = {
+  limit?: number
+  offset?: number
+  name?: string
+  ability?: number
+  type?: number
+  area?: number
+}
+
+export function usePokemons({
+  ability,
+  limit = 40,
+  area,
+  name,
+  offset = 0,
+  type,
+}: PokemonFilters) {
   return useInfiniteQuery<PokemonsResponse>({
-    queryKey: ['pokemons', limit],
+    queryKey: ['pokemons', limit, ability, area, name, type],
     getNextPageParam: (lastPage, allPages) => {
       const loadedPokemons = allPages.flatMap((page) => page.pokemons).length
       if (loadedPokemons < lastPage.total) {
@@ -21,7 +37,12 @@ export function usePokemons(limit: number, offset: number = 0) {
     initialPageParam: offset,
     queryFn: async ({ pageParam }) => {
       const data = await graphqlClient.request<GQLPokemonsResponse>(
-        GET_POKEMONS,
+        buildGetPokemonsQuery({
+          abilityId: ability,
+          areaId: area,
+          name: name,
+          typeId: type,
+        }),
         { limit, offset: pageParam }
       )
       return {

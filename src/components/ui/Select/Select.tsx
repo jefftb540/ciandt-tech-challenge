@@ -10,7 +10,7 @@ import { styled } from '@mui/material/styles'
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
-  color: theme.palette.text.primary,
+  color: theme.palette.text.secondary,
   borderRadius: 16,
   '& .MuiInputLabel-root': {
     color: theme.palette.text.secondary,
