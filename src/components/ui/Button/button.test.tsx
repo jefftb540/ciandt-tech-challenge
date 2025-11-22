@@ -20,7 +20,6 @@ describe('Button component', () => {
   it('applies the custom styles', () => {
     render(<Button>Click Me</Button>)
     const btn = screen.getByRole('button', { name: /click me/i })
-    // verifica se border-radius e maxWidth estão aplicados
     expect(btn).toHaveStyle('border-radius: 12px')
     expect(btn).toHaveStyle('max-width: 200px')
   })
