@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  Box,
   InputAdornment,
   TextField as MuiTextField,
   TextFieldProps,
@@ -27,11 +28,12 @@ export function SearchInput(
   const { label, ...rest } = props
 
   return (
-    <>
+    <Box>
       <Typography variant="body2">{label}</Typography>
       <StyledTextField
         size="small"
         {...rest}
+        fullWidth
         slotProps={{
           input: {
             endAdornment: (
@@ -42,6 +44,6 @@ export function SearchInput(
           },
         }}
       />
-    </>
+    </Box>
   )
 }

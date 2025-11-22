@@ -1,5 +1,11 @@
 import React from 'react'
-import { Select as MuiSelect, SelectProps, Typography } from '@mui/material'
+import {
+  Box,
+  FormControl,
+  Select as MuiSelect,
+  SelectProps,
+  Typography,
+} from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 const StyledSelect = styled(MuiSelect)(({ theme }) => ({
@@ -21,11 +27,13 @@ export function Select(props: Omit<SelectProps, 'size'>) {
   const { label, children, ...rest } = props
 
   return (
-    <>
+    <Box>
       <Typography variant="body2">{label}</Typography>
-      <StyledSelect size="small" {...rest}>
-        {children}
-      </StyledSelect>
-    </>
+      <FormControl fullWidth>
+        <StyledSelect fullWidth size="small" {...rest}>
+          {children}
+        </StyledSelect>
+      </FormControl>
+    </Box>
   )
 }
