@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { PokemonGrid } from '../../components/'
+import { PokemonGrid, PokemonTable } from '../../components/'
 
 import { Button } from '../../components/ui/Button/Button'
 import { usePokemons } from '../../hooks/api/usePokemons/usePokemons'
@@ -7,7 +7,6 @@ import { MenuItem, SearchInput, Select } from '../../components/ui'
 import { useAbilities, useAreas, useTypes } from '../../hooks/api'
 import { useState } from 'react'
 import { useDebounce } from '../../hooks'
-import { PokemonTable } from '../../components/PokemonTable/PokemonTable'
 import { useSearchParams } from 'react-router-dom'
 
 export const Home = () => {

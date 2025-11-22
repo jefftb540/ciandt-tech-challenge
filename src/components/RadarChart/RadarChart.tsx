@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useRef } from 'react'
 import * as am5 from '@amcharts/amcharts5'
 import { CategoryAxis, ValueAxis } from '@amcharts/amcharts5/xy'
 import {
-  RadarChart,
+  RadarChart as AmRadarChart,
   RadarLineSeries,
   AxisRendererRadial,
   AxisRendererCircular,
@@ -11,13 +11,13 @@ import am5themes_Material from '@amcharts/amcharts5/themes/Material'
 
 type Stat = { name: string; value: number }
 
-export default function StatsRadarChart({
+export const RadarChart = ({
   stats,
   color,
 }: {
   stats: Stat[]
   color: string
-}) {
+}) => {
   const chartRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
@@ -35,7 +35,7 @@ export default function StatsRadarChart({
     root.setThemes([am5themes_Material.new(root), myTheme])
 
     const chart = root.container.children.push(
-      RadarChart.new(root, {
+      AmRadarChart.new(root, {
         startAngle: 0,
         endAngle: 360,
       })

@@ -9,8 +9,8 @@ import {
   Typography,
 } from '@mui/material'
 import { Chip } from '../../components/ui'
-import RadarChart from '../../components/RadarChart/RadarChart'
-import { colorsMap } from '../../components/ui/Chip/Chip'
+import { RadarChart } from '../../components/'
+import { colorsMap } from '../../utils/constants/colorsMap'
 
 const StyledProp = styled(Typography)({
   textShadow:
