@@ -1,0 +1,268 @@
+import { Link, useParams } from 'react-router-dom'
+import { usePokemon } from '../../hooks/api/'
+import {
+  Box,
+  Card,
+  CardMedia,
+  Divider,
+  styled,
+  Typography,
+} from '@mui/material'
+import { Chip } from '../../components/ui'
+import RadarChart from '../../components/RadarChart/RadarChart'
+import { colorsMap } from '../../components/ui/Chip/Chip'
+
+const StyledProp = styled(Typography)({
+  textShadow:
+    'rgb(0, 0, 0) 0px 0px 3px,rgb(155, 225, 255) 1px 1px 1px,rgb(155, 225, 255) -1px -1px 1px',
+})
+const StyledPropTitle = styled(Typography)(({ theme }) => ({
+  color: theme.palette.info.main,
+}))
+
+export const Pokemon = () => {
+  const { id } = useParams()
+  const { data: pokemon, isLoading } = usePokemon({ id: Number(id) })
+  if (isLoading) return <>Loading</>
+
+  if (!pokemon) return <>Not Found</>
+
+  return (
+    <>
+      <Box
+        sx={{
+          display: 'flex',
+          gap: 4,
+          maxWidth: '960px',
+          margin: 'auto',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Box
+            sx={{
+              width: '300px',
+              height: '300px',
+              borderRadius: '50%',
+              borderWidth: 1,
+              borderStyle: 'solid',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow:
+                ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
+            }}
+          >
+            <CardMedia
+              component="image"
+              image={
+                pokemon.pokemon_v2_pokemonsprites[0].sprites.other[
+                  'official-artwork'
+                ].front_default || '/assets/pokemon-placeholder.png'
+              }
+              sx={{
+                width: '280px',
+                height: '280px',
+              }}
+            />
+          </Box>
+          <Box
+            sx={{
+              marginTop: 4,
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+            }}
+          >
+            <Box
+              display="flex"
+              flexDirection="column-reverse"
+              alignItems="center"
+            >
+              <StyledPropTitle>Height</StyledPropTitle>
+              <StyledProp variant="h6">{pokemon.height}m</StyledProp>
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column-reverse"
+              alignItems="center"
+            >
+              <StyledPropTitle>Weight</StyledPropTitle>
+              <StyledProp variant="h6">{pokemon.weight}Kg</StyledProp>
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column-reverse"
+              alignItems="center"
+            >
+              <StyledPropTitle>Category</StyledPropTitle>
+              <StyledProp variant="h6">
+                {
+                  pokemon.pokemon_v2_pokemonspecy
+                    .pokemon_v2_pokemonspeciesnames[0].genus
+                }
+              </StyledProp>
+            </Box>
+          </Box>
+          <RadarChart
+            stats={pokemon.pokemon_v2_pokemonstats.map((stat) => ({
+              name: stat.pokemon_v2_stat.name
+                .split('-')
+                .join(' ')
+                .toLocaleUpperCase('PT-br'),
+              value: stat.base_stat,
+            }))}
+            color={
+              colorsMap[pokemon.pokemon_v2_pokemontypes[0].pokemon_v2_type.name]
+            }
+          />
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flexDirection: 'column',
+          }}
+        >
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 1,
+            }}
+          >
+            <Typography
+              component="h1"
+              variant="h1"
+              sx={{
+                textTransform: 'capitalize',
+                fontSize: '48px',
+                fontWeight: '500',
+                textShadow:
+                  ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
+              }}
+            >
+              {pokemon.name}
+            </Typography>
+            <Typography
+              sx={({ palette }) => ({
+                color: palette.info.main,
+                fontStyle: 'italic',
+                textAlign: 'justify',
+              })}
+            >
+              "
+              {
+                pokemon.pokemon_v2_pokemonspecy
+                  .pokemon_v2_pokemonspeciesflavortexts[0].flavor_text
+              }
+              "
+            </Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 2,
+              }}
+            >
+              {pokemon.pokemon_v2_pokemontypes.map((typeInfo) => (
+                <Chip
+                  key={typeInfo.pokemon_v2_type.name}
+                  label={typeInfo.pokemon_v2_type.name}
+                />
+              ))}
+            </Box>
+          </Box>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 10,
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                gap: 8,
+              }}
+            >
+              {pokemon.pokemon_v2_pokemonabilities.map(
+                (ability, index, arr) => (
+                  <>
+                    <Box>
+                      <StyledProp variant="h6" textTransform="capitalize">
+                        {ability.pokemon_v2_ability.name}
+                      </StyledProp>
+                      <StyledPropTitle>
+                        {
+                          ability.pokemon_v2_ability
+                            .pokemon_v2_abilityflavortexts[0].flavor_text
+                        }
+                      </StyledPropTitle>
+                    </Box>
+                    {index < arr.length - 1 && (
+                      <Divider orientation="vertical" />
+                    )}
+                  </>
+                )
+              )}
+            </Box>
+            <Box marginTop={4}>
+              <Typography variant="h4" textAlign="center">
+                Evolutions
+              </Typography>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-evenly',
+                  marginTop: 4,
+                }}
+              >
+                {pokemon.pokemon_v2_pokemonspecy.pokemon_v2_evolutionchain.pokemon_v2_pokemonspecies.map(
+                  (evolution) => (
+                    <Card
+                      component={Link}
+                      to={`/pokemon/${evolution.id}`}
+                      sx={{
+                        textDecoration: 'none',
+                        padding: 1,
+                        textAlign: 'center',
+                        width: 140,
+                        height: 160,
+                        backgroundColor: 'transparent',
+                        borderWidth: 1,
+                        borderStyle: 'solid',
+                        boxShadow:
+                          ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 1,
+                        alignItems: 'center',
+                        borderRadius: 4,
+                      }}
+                    >
+                      {evolution.name}
+
+                      {evolution.pokemon_v2_pokemons.map((pokemon) => (
+                        <CardMedia
+                          image={pokemon.pokemon_v2_pokemonsprites[0].sprites}
+                          sx={{
+                            width: '100px',
+                            height: '100px',
+                          }}
+                        />
+                      ))}
+                    </Card>
+                  )
+                )}
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </>
+  )
+}

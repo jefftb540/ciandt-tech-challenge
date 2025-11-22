@@ -1,6 +1,7 @@
 import { Box, Card, CardMedia, Divider, Typography } from '@mui/material'
 import { Chip } from '../ui/Chip/Chip'
 import { GQLPokemon } from '../../types/Pokemon'
+import { Link } from 'react-router-dom'
 
 type PokemonCardProps = {
   pokemon: GQLPokemon
@@ -9,7 +10,10 @@ type PokemonCardProps = {
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
   return (
     <Card
+      component={Link}
+      to={`/pokemon/${pokemon.id}`}
       sx={{
+        textDecoration: 'none',
         padding: 2,
         textAlign: 'center',
         width: 180,
@@ -17,7 +21,8 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderStyle: 'solid',
-        boxShadow: '0 0 6px rgba(59,140,255,0.45)',
+        boxShadow:
+          ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
         display: 'flex',
         flexDirection: 'column',
         gap: 2,
