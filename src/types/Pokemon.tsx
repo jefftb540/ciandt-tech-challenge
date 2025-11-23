@@ -26,16 +26,7 @@ export type Pokemon = {
   height: number
   weight: number
 
-  pokemon_v2_pokemonsprites: {
-    sprites: {
-      other: {
-        'official-artwork': {
-          front_default: string | null
-          front_shiny: string | null
-        }
-      }
-    }
-  }[]
+  pokemon_v2_pokemonsprites: { sprites: string }[]
 
   pokemon_v2_pokemontypes: {
     pokemon_v2_type: {

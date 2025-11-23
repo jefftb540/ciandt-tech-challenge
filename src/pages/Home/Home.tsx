@@ -37,7 +37,6 @@ export const Home = () => {
         sx={{
           margin: 'auto',
           display: 'grid',
-          maxWidth: '960px',
           gridTemplateColumns: '1fr 1fr',
           columnGap: 5,
           rowGap: 2,

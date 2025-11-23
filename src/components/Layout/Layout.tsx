@@ -4,9 +4,23 @@ import { Outlet } from 'react-router-dom'
 import { Footer } from '../Footer/Footer'
 
 export const Layout = () => (
-  <Box>
+  <Box
+    sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      minHeight: '100vh',
+    }}
+  >
     <Header />
-    <Outlet />
+    <Box
+      sx={{
+        maxWidth: '960px',
+        margin: 'auto',
+        flexGrow: 1,
+      }}
+    >
+      <Outlet />
+    </Box>
     <Footer />
   </Box>
 )

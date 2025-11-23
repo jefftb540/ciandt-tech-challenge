@@ -5,12 +5,16 @@ import {
   Card,
   CardMedia,
   Divider,
+  IconButton,
   styled,
   Typography,
 } from '@mui/material'
 import { Chip } from '../../components/ui'
 import { RadarChart } from '../../components/'
 import { colorsMap } from '../../utils/constants/colorsMap'
+import { useFavorites } from '../../hooks'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 const StyledProp = styled(Typography)({
   textShadow:
@@ -19,13 +23,25 @@ const StyledProp = styled(Typography)({
 const StyledPropTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.info.main,
 }))
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.info.main,
+}))
 
 export const Pokemon = () => {
   const { id } = useParams()
   const { data: pokemon, isLoading } = usePokemon({ id: Number(id) })
+
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites()
+
+  const isPokemonFavorite = isFavorite(pokemon?.id)
+
   if (isLoading) return <>Loading</>
 
   if (!pokemon) return <>Not Found</>
+
+  const toggleFavorite = () => {
+    isPokemonFavorite ? removeFavorite(pokemon?.id) : addFavorite(pokemon)
+  }
 
   return (
     <>
@@ -33,7 +49,6 @@ export const Pokemon = () => {
         sx={{
           display: 'flex',
           gap: 4,
-          maxWidth: '960px',
           margin: 'auto',
         }}
       >
@@ -60,9 +75,8 @@ export const Pokemon = () => {
             <CardMedia
               component="image"
               image={
-                pokemon.pokemon_v2_pokemonsprites[0].sprites.other[
-                  'official-artwork'
-                ].front_default || '/assets/pokemon-placeholder.png'
+                pokemon.pokemon_v2_pokemonsprites[0].sprites ||
+                '/assets/pokemon-placeholder.png'
               }
               sx={{
                 width: '280px',
@@ -135,19 +149,30 @@ export const Pokemon = () => {
               gap: 1,
             }}
           >
-            <Typography
-              component="h1"
-              variant="h1"
+            <Box
               sx={{
-                textTransform: 'capitalize',
-                fontSize: '48px',
-                fontWeight: '500',
-                textShadow:
-                  ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              {pokemon.name}
-            </Typography>
+              <Typography
+                component="h1"
+                variant="h1"
+                sx={{
+                  textTransform: 'capitalize',
+                  fontSize: '48px',
+                  fontWeight: '500',
+                  textShadow:
+                    ' rgb(0, 0, 0) 0px 0px 3px, rgb(155, 225, 255) 2px 2px 7px, rgb(155, 225, 255) -2px -2px 7px',
+                }}
+              >
+                {pokemon.name}
+              </Typography>
+              <StyledIconButton onClick={toggleFavorite}>
+                {isPokemonFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              </StyledIconButton>
+            </Box>
             <Typography
               sx={({ palette }) => ({
                 color: palette.info.main,

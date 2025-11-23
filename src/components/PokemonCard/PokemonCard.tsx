@@ -1,18 +1,44 @@
-import { Box, Card, CardMedia, Divider, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardMedia,
+  Divider,
+  IconButton,
+  styled,
+  Typography,
+} from '@mui/material'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import { Chip } from '../ui/Chip/Chip'
 import { GQLPokemon } from '../../types/Pokemon'
 import { Link } from 'react-router-dom'
+import { useFavorites } from '../../hooks'
 
 type PokemonCardProps = {
   pokemon: GQLPokemon
 }
 
+const StyledIconButton = styled(IconButton)(({ theme }) => ({
+  color: theme.palette.info.main,
+  position: 'absolute',
+  right: 2,
+  top: 2,
+}))
+
 export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
+  const { isFavorite, addFavorite, removeFavorite } = useFavorites()
+
+  const isPokemonFavorite = isFavorite(pokemon?.id)
+
+  const toggleFavorite = () => {
+    isPokemonFavorite ? removeFavorite(pokemon?.id) : addFavorite(pokemon)
+  }
   return (
     <Card
       component={Link}
       to={`/pokemon/${pokemon.id}`}
       sx={{
+        position: 'relative',
         textDecoration: 'none',
         padding: 2,
         textAlign: 'center',
@@ -30,6 +56,16 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
         borderRadius: 4,
       }}
     >
+      <StyledIconButton
+        size="small"
+        onClick={(e) => {
+          e.stopPropagation()
+          e.preventDefault()
+          toggleFavorite()
+        }}
+      >
+        {isPokemonFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+      </StyledIconButton>
       <Box
         sx={{
           width: '100px',

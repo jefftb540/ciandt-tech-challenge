@@ -9,7 +9,7 @@ export const GET_POKEMON = gql`
       weight
 
       pokemon_v2_pokemonsprites {
-        sprites
+        sprites(path: "$.other.official-artwork.front_default")
       }
 
       pokemon_v2_pokemontypes {
