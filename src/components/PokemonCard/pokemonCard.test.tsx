@@ -1,6 +1,13 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 import { PokemonCard } from './PokemonCard'
+import { BrowserRouter } from 'react-router-dom'
 import { GQLPokemon } from '../../types/Pokemon'
+import { useFavorites } from '../../hooks/useFavorites/useFavorites'
+
+// ---- MOCK DO HOOK useFavorites ----
+jest.mock('../../hooks/useFavorites/useFavorites')
+
+const mockedUseFavorites = jest.mocked(useFavorites)
 
 const mockPokemon: GQLPokemon = {
   id: 24,
@@ -12,28 +19,34 @@ const mockPokemon: GQLPokemon = {
     },
   ],
   pokemon_v2_pokemonstats: [],
-
   pokemon_v2_pokemontypes: [{ pokemon_v2_type: { name: 'poison' } }],
 }
 
+const Wrapper = ({ children }: { children: React.ReactNode }) => (
+  <BrowserRouter>{children}</BrowserRouter>
+)
+
 describe('PokemonCard', () => {
-  it('renders pokemon name', () => {
-    render(<PokemonCard pokemon={mockPokemon} />)
-    expect(screen.getByRole('heading', { name: /arbok/i })).toBeInTheDocument()
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
-  it('renders type chips', () => {
-    render(<PokemonCard pokemon={mockPokemon} />)
-    expect(screen.getByText('poison')).toBeInTheDocument()
-  })
+  it('renders pokemon card correctly', () => {
+    mockedUseFavorites.mockReturnValue({
+      favorites: [],
+      addFavorite: jest.fn(),
+      removeFavorite: jest.fn(),
+      isFavorite: jest.fn().mockReturnValue(false),
+    })
 
-  it('applies official artwork to background-image', () => {
-    render(<PokemonCard pokemon={mockPokemon} />)
+    render(<PokemonCard pokemon={mockPokemon} />, { wrapper: Wrapper })
 
-    const imageEl = screen.getByRole('img')
+    expect(screen.getByText(/arbok/i)).toBeInTheDocument()
+    expect(screen.getByText(/poison/i)).toBeInTheDocument()
 
-    expect(imageEl).toHaveStyle(
-      `background-image: url(${mockPokemon.pokemon_v2_pokemonsprites[0].sprites})`
+    const img = screen.getByRole('img') as HTMLImageElement
+    expect(img.style.backgroundImage).toContain(
+      mockPokemon.pokemon_v2_pokemonsprites[0].sprites
     )
   })
 
@@ -43,11 +56,52 @@ describe('PokemonCard', () => {
       pokemon_v2_pokemonsprites: [{ sprites: '' }],
     }
 
-    render(<PokemonCard pokemon={pokemon} />)
+    mockedUseFavorites.mockReturnValue({
+      favorites: [],
+      addFavorite: jest.fn(),
+      removeFavorite: jest.fn(),
+      isFavorite: jest.fn().mockReturnValue(false),
+    })
+
+    render(<PokemonCard pokemon={pokemon} />, { wrapper: Wrapper })
 
     const imageEl = screen.getByRole('img')
     expect(imageEl).toHaveStyle(
       `background-image: url(/assets/pokemon-placeholder.png)`
     )
+  })
+
+  it('calls addFavorite when clicking favorite button', () => {
+    const mockAddFavorite = jest.fn()
+
+    mockedUseFavorites.mockReturnValue({
+      favorites: [],
+      addFavorite: mockAddFavorite,
+      removeFavorite: jest.fn(),
+      isFavorite: jest.fn().mockReturnValue(false),
+    })
+
+    render(<PokemonCard pokemon={mockPokemon} />, { wrapper: Wrapper })
+
+    fireEvent.click(screen.getByTestId('favorite-icon'))
+
+    expect(mockAddFavorite).toHaveBeenCalledWith(mockPokemon)
+  })
+
+  it('calls removeFavorite when the pokemon is already a favorite', () => {
+    const mockRemoveFavorite = jest.fn()
+
+    mockedUseFavorites.mockReturnValue({
+      favorites: [mockPokemon],
+      addFavorite: jest.fn(),
+      removeFavorite: mockRemoveFavorite,
+      isFavorite: jest.fn().mockReturnValue(true),
+    })
+
+    render(<PokemonCard pokemon={mockPokemon} />, { wrapper: Wrapper })
+
+    fireEvent.click(screen.getByTestId('favorite-icon'))
+
+    expect(mockRemoveFavorite).toHaveBeenCalledWith(mockPokemon.id)
   })
 })

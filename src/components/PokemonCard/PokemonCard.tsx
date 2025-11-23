@@ -57,6 +57,7 @@ export const PokemonCard = ({ pokemon }: PokemonCardProps) => {
       }}
     >
       <StyledIconButton
+        data-testid="favorite-icon"
         size="small"
         onClick={(e) => {
           e.stopPropagation()

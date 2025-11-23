@@ -25,7 +25,7 @@ export const PokemonGrid = ({ pokemons }: PokemonGridProps) => {
             }}
           >
             {pokemons?.map((pokemon) => (
-              <PokemonCard pokemon={pokemon} />
+              <PokemonCard key={pokemon.id} pokemon={pokemon} />
             ))}
           </Box>
         </Box>
