@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Chip } from '../../components/ui'
-import { RadarChart } from '../../components/'
+import { Loading, RadarChart } from '../../components/'
 import { colorsMap } from '../../utils/constants/colorsMap'
 import { useFavorites } from '../../hooks'
 import FavoriteIcon from '@mui/icons-material/Favorite'
@@ -35,7 +35,7 @@ export const Pokemon = () => {
 
   const isPokemonFavorite = isFavorite(pokemon?.id)
 
-  if (isLoading) return <>Loading</>
+  if (isLoading) return <Loading />
 
   if (!pokemon) return <>Not Found</>
 

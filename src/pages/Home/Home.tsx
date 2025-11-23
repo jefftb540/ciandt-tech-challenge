@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { PokemonGrid, PokemonTable } from '../../components/'
+import { Loading, PokemonGrid, PokemonTable } from '../../components/'
 
 import { Button } from '../../components/ui/Button/Button'
 import { usePokemons } from '../../hooks/api/usePokemons/usePokemons'
@@ -22,7 +22,11 @@ export const Home = () => {
 
   const debouncedSearch = useDebounce(search)
 
-  const { data: pokemonData, fetchNextPage } = usePokemons({
+  const {
+    data: pokemonData,
+    fetchNextPage,
+    isLoading,
+  } = usePokemons({
     ability,
     area,
     name: debouncedSearch,
@@ -86,25 +90,40 @@ export const Home = () => {
           ))}
         </Select>
       </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          flexDirection: 'column',
-          gap: 4,
-          mt: 4,
-        }}
-      >
-        {searchParams.get('view') === 'Table' ? (
-          <PokemonTable pokemons={pokemons} />
-        ) : (
-          <PokemonGrid pokemons={pokemons} />
-        )}
-        <Button variant="outlined" size="large" onClick={() => fetchNextPage()}>
-          Load more
-        </Button>
-      </Box>
+      {isLoading ? (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+          }}
+        >
+          <Loading />
+        </Box>
+      ) : (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column',
+            gap: 4,
+            mt: 4,
+          }}
+        >
+          {searchParams.get('view') === 'Table' ? (
+            <PokemonTable pokemons={pokemons} />
+          ) : (
+            <PokemonGrid pokemons={pokemons} />
+          )}
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => fetchNextPage()}
+          >
+            Load more
+          </Button>
+        </Box>
+      )}
     </>
   )
 }
