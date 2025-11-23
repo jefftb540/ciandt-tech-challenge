@@ -15,7 +15,7 @@ describe('Header component', () => {
 
   it('renders all navigation links', () => {
     renderWithRouter(<Header />)
-    const links = ['Home', 'Compare', 'Favorites']
+    const links = ['Home', 'Table View', 'Favorites']
     links.forEach((text) => {
       expect(
         screen.getByRole('link', { name: new RegExp(text, 'i') })
@@ -29,9 +29,9 @@ describe('Header component', () => {
       'href',
       '/'
     )
-    expect(screen.getByRole('link', { name: /compare/i })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: /table view/i })).toHaveAttribute(
       'href',
-      '/compare'
+      '/?view=Table'
     )
     expect(screen.getByRole('link', { name: /favorites/i })).toHaveAttribute(
       'href',
