@@ -9,7 +9,6 @@
     "@mui/icons-material": "^7.3.5",
     "@mui/material": "^7.3.5",
     "@tanstack/react-query": "^5.90.10",
-    "ag-grid-react": "^34.3.1",
     "graphql-request": "^7.3.4",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
@@ -41,6 +40,21 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "jest": {
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "/src/types/",
+      "/src/providers/",
+      "/src/hooks/",
+      "/src/graphQl/",
+      "/src/pages/",
+      "/src/routes/",
+      "/src/utils/test/"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!(d3-shape|d3-path|d3-array|@amcharts)/)"
     ]
   },
   "devDependencies": {
