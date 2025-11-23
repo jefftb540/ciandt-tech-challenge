@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link as RouterLink, useParams } from 'react-router-dom'
 import { usePokemon } from '../../hooks/api/'
 import {
   Box,
@@ -9,7 +9,7 @@ import {
   styled,
   Typography,
 } from '@mui/material'
-import { Chip } from '../../components/ui'
+import { Chip, Link } from '../../components/ui'
 import { Loading, RadarChart } from '../../components/'
 import { colorsMap } from '../../utils/constants/colorsMap'
 import { useFavorites } from '../../hooks'
@@ -36,8 +36,31 @@ export const Pokemon = () => {
   const isPokemonFavorite = isFavorite(pokemon?.id)
 
   if (isLoading) return <Loading />
+  if (!pokemon) {
+    const randomId = Math.floor(Math.random() * 898) + 1
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2,
+          margin: 'auto',
+          mt: 8,
+          px: 2,
+        }}
+      >
+        <Typography variant="h3" color="error">
+          Pokemon not found
+        </Typography>
+        <Typography sx={{ textAlign: 'center', maxWidth: 560 }}>
+          The Pokémon you are looking for does not exist or could not be loaded.
+        </Typography>
 
-  if (!pokemon) return <>Not Found</>
+        <Link to={`/pokemon/${randomId}`}>Try a random Pokémon</Link>
+      </Box>
+    )
+  }
 
   const toggleFavorite = () => {
     isPokemonFavorite ? removeFavorite(pokemon?.id) : addFavorite(pokemon)
@@ -249,7 +272,7 @@ export const Pokemon = () => {
                 {pokemon.pokemon_v2_pokemonspecy.pokemon_v2_evolutionchain.pokemon_v2_pokemonspecies.map(
                   (evolution) => (
                     <Card
-                      component={Link}
+                      component={RouterLink}
                       to={`/pokemon/${evolution.id}`}
                       sx={{
                         textDecoration: 'none',

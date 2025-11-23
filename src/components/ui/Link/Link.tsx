@@ -13,11 +13,5 @@ const StyledLink = styled(MuiLink)(({ theme }) => ({
 }))
 
 export function Link(props: LinkProps & { to: string }) {
-  return (
-    <StyledLink
-      style={{ textDecoration: 'none' }}
-      component={RouterLink}
-      {...props}
-    />
-  )
+  return <StyledLink component={RouterLink} {...props} />
 }
