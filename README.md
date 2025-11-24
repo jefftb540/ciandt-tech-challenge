@@ -1,5 +1,4 @@
-
-## About the Project
+# Pokedex Explorer
 
 This application was developed as part of a technical assessment.
 The goal was to build a clean, maintainable, and scalable frontend using modern tooling while integrating with a GraphQL API.
@@ -58,23 +57,17 @@ GraphQL was chosen because the challenge provides a GraphQL-based version of the
 The project includes unit tests for components.
 Some areas are not fully covered due to time constraints, especially integration cases involving nested data and React Query behaviors.
 
-### Planned improvements:
+## Areas for Improvement
 
 - Increase overall test coverage, testing hooks and api calls
 
-- Add integration tests for server state flows
-
-- Expand component tests for edge cases
-
-## Areas for Improvement
-
-- More complete test coverage
+- Add integration and e2e tests for server state flows
 
 - Better error handling and fallback UI
 
 - Small accessibility refinements
 
-- Adding e2e tests (Cypress)
+- Improve overall responsiveness to ensure a consistent experience across different screen sizes.
 
 ## Final Notes
 
